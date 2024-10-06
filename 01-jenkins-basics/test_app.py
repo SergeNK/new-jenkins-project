@@ -20,6 +20,7 @@ def test_add_task(client):
     assert response.status_code == 200
     assert 'New Task' in tasks.values()
 
+
 def test_delete_task(client):
     # Add a task first
     client.post('/', data={'task_content': 'Task to Delete', 'add_task': True})
