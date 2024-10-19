@@ -26,6 +26,7 @@ pipeline {
             steps {
                 sh "python -m pytest"
                 echo "The DB username: ${USERNAME} and the password is ${PASSWORD}"
+                echo "Commit: ${env.GIT_COMMIT}"
             }
         }
     }
