@@ -5,7 +5,6 @@ pipeline {
         DB_HOST = '192.168.12.1'
         USERNAME = 'user1'
         PASSWORD = 'password123'
-        SERVER_CREDS = credentials('server-creds')
     }
     stages {
 
@@ -18,10 +17,16 @@ pipeline {
 
         stage('setup') {
             steps {
+                withCredentials([usernamePassword(credentialsId: 'server-creds',
+                usernameVariable: "myuser", passwordVariable: "mypassword")]) {
+                    sh '''
+                    echo ${myuser}
+                    echo ${mypassword}
+                    '''
+                }
+
                 sh "pip install -r requirements.txt"
                 echo "The Database IP is: ${DB_HOST}"
-                sh 'echo "my creds username: ${SERVER_CREDS_USR}"'
-                sh 'echo "my creds password: ${SERVER_CREDS_PSW}"'
                 
             }
         }
