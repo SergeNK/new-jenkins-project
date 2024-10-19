@@ -4,32 +4,49 @@ pipeline {
     environment {
         DB_HOST = '192.168.12.1'
         USERNAME = 'user1'
-        PASSWORD = 'password123'
+        PASSWORD = 'password123' 
+    }
+
+    parameters {
+        string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'Specify the env for deployment')
+        booleanParam(name: 'RUN_TESTS', defaultValue: true, description: "Run Tests in pipeline")
+
     }
     stages {
 
-        // stage('checkout') {
-        //     steps {
-        //         git url: 'https://github.com/SergeNK/new-jenkins-project.git', branch: 'main'
-        //         sh "ls -ltr"
-        //     }
-        // }
-
-        stage('setup') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'server-creds',
-                usernameVariable: "myuser", passwordVariable: "mypassword")]) {
-                    sh '''
-                    echo ${myuser}
-                    echo ${mypassword}
-                    '''
+        stage('test') {
+            when {
+                expression {
+                    params.RUN_TESTS == true
                 }
-
-                sh "pip install -r requirements.txt"
-                echo "The Database IP is: ${DB_HOST}"
-                
+            }
+            steps {
+                echo "testing application"
             }
         }
+        stage('Deploy') {
+            steps {
+                echo "deploying to ${params.ENVIRONMENT} environment"
+            }
+        }
+
+
+
+        // stage('setup') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'server-creds',
+        //         usernameVariable: "myuser", passwordVariable: "mypassword")]) {
+        //             sh '''
+        //             echo ${myuser}
+        //             echo ${mypassword}
+        //             '''
+        //         }
+
+        //         sh "pip install -r requirements.txt"
+        //         echo "The Database IP is: ${DB_HOST}"
+                
+        //     }
+        // }
 
         stage('Test') {
             steps {
