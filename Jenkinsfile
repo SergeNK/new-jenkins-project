@@ -20,7 +20,8 @@ pipeline {
             steps {
                 sh "pip install -r requirements.txt"
                 echo "The Database IP is: ${DB_HOST}"
-                sh 'echo "my creds: ${SERVER_CREDS}"'
+                sh 'echo "my creds username: ${SERVER_CREDS_USER}"'
+                sh 'echo "my creds password: ${SERVER_CREDS_PSW}"'
                 
             }
         }
